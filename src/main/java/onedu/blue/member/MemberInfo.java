@@ -1,8 +1,7 @@
 package onedu.blue.member;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 import onedu.blue.member.entities.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +15,8 @@ import java.util.Collection;
  * 구현체
  *
  */
-@Getter
+@Data
 @Builder
-@ToString
 public class MemberInfo implements UserDetails {
 
     private String email;
