@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import onedu.blue.member.constants.Authority;
 
-import java.io.Serializable;
-
 /**
  * 회원 (Member) 다중 권한
  * @ManyToOne
@@ -24,7 +22,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @IdClass(AuthoritiesId.class) // AuthritiesId = 복합키
-public class Authorities implements Serializable {
+public class Authorities {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY) // 거의 항상 Join 할 것 같긴 하지만 우선 학습한 대로 LAZY

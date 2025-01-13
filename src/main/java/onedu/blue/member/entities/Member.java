@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.ToString;
 import onedu.blue.global.entities.BaseEntity;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
  */
 @Data
 @Entity
-public class Member extends BaseEntity implements Serializable {
+public class Member extends BaseEntity {
 
     @Id @GeneratedValue
     private Long seq; // 회원 번호
