@@ -30,7 +30,7 @@ public class MemberControllerTest {
     @DisplayName("회원가입 테스트")
     void joinTest() throws Exception {
         // 환경 변수
-        // config.server=http://config-service.onedu.blue
+        // config.server=https://config-service.onedu.blue
 
         RequestJoin form = new RequestJoin();
 
