@@ -19,8 +19,10 @@ public class RequestJoin {
     private String name; // 회원명
 
     @Size(min=8, max=40)
+    @NotBlank
     private String password;
 
+    @NotBlank
     private String confirmPassword;
 
     // 필수 약관 동의 여부
