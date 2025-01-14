@@ -1,14 +1,14 @@
 package onedu.blue.member.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import onedu.blue.global.exceptions.UnAuthorizedException;
+import onedu.blue.global.libs.Utils;
 import onedu.blue.member.MemberInfo;
 import onedu.blue.member.services.MemberInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +36,9 @@ public class TokenService {
     private final JwtProperties properties;
 
     private final MemberInfoService infoService;
+
+    @Autowired
+    private Utils utils;
 
     private Key key;
 
@@ -91,6 +94,9 @@ public class TokenService {
      */
     public Authentication authenticate(String token) {
 
+        // Token 유효성 검사
+        validate(token);
+
         // Parser = Subject, Claim 정보 분해해 가져와 검증후 완성 용도
         Claims claims = Jwts.parser()
                 .setSigningKey(key) // 위변조 여부 검증
@@ -134,4 +140,49 @@ public class TokenService {
         // Base Method
         return authenticate(token);
     }
+
+    /**
+     * Token 검증 (유효성 체크)
+     *
+     * @param token
+     */
+    public void validate(String token) {
+
+        String errorCode = null;
+
+        Exception error = null;
+
+        try {
+            // SigningKey = 시그니쳐
+            Jwts.parser().setSigningKey(key).build().parseSignedClaims(token).getPayload();
+
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) { // 잘못된 JWT 서명
+
+            errorCode = "JWT.malformed";
+            error = e;
+
+        } catch (ExpiredJwtException e) { // JWT Token 만료
+
+            errorCode = "JWT.expired";
+            error = e;
+
+        } catch (UnsupportedJwtException e) { // 지원되지 않는 JWT Token
+
+            errorCode = "JWT.unsupported";
+            error = e;
+
+        } catch (Exception e) {
+
+            errorCode = "JWT.error";
+            error = e;
+        }
+
+        if (StringUtils.hasText(errorCode)) {
+
+            throw new UnAuthorizedException(utils.getMessage(errorCode));
+        }
+
+        if (error != null) error.printStackTrace();
+    }
+
 }
