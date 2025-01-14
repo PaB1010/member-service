@@ -65,7 +65,7 @@ public class TokenService {
 
         // Token - 이메일 & 권한 실어 보낼 것
         // HMAC 시그니쳐 = sh512 해쉬
-        String authorities = memberInfo.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining("||"));
+        String authorities = memberInfo.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining("\\|\\|"));
 
         // Token 만료 시간 가공용
         int validTime = properties.getValidTime() * 1000;

@@ -69,10 +69,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests( c -> {
 
                       // 미로그인도 즉, 전체 접근 가능 패턴
-                    c.requestMatchers("/member/join", "/member/login").permitAll()
+                    c.requestMatchers("/join", // GateWay 연동시 /api/v1/member/join 예정
+                                    "/login",
+                                    "/apidocs/html",
+                                    "/swagger-ui*/**",
+                                    "/api-docs/**").permitAll()
 
                             // 관리자만 접근 가능 패턴
-                            .requestMatchers("/admin/member/**").hasAnyAuthority("ADMIN")
+                            .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
 
                             // 나머지는 아무 인증, 즉 로그인시 접근 가능 패턴
                             .anyRequest().authenticated();
@@ -87,4 +91,9 @@ public class SecurityConfig {
 
         return new BCryptPasswordEncoder();
     }
+
+//    public DefaultCookieSerializerCustomizer cookieSerializer() {
+//
+//
+//    }
 }

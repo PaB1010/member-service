@@ -21,7 +21,7 @@ public class LoginFilter extends GenericFilterBean {
     private final TokenService tokenService;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse reponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
         try {
             // Token 이 유입되면 로그인 처리
@@ -29,14 +29,13 @@ public class LoginFilter extends GenericFilterBean {
 
         } catch (UnAuthorizedException e) {
 
-            HttpServletResponse res = (HttpServletResponse) reponse;
+            HttpServletResponse res = (HttpServletResponse) response;
 
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
 
             e.printStackTrace();
         }
 
-
-
+        filterChain.doFilter(request, response);
     }
 }

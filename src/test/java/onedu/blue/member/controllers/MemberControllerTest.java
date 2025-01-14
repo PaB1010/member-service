@@ -1,5 +1,6 @@
 package onedu.blue.member.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,15 +10,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
 @ActiveProfiles({"default", "test", "jwt"})
 @AutoConfigureMockMvc
+@Transactional
 public class MemberControllerTest {
 
     @Autowired
@@ -46,7 +52,7 @@ public class MemberControllerTest {
 
         String body = om.writeValueAsString(form);
 
-        mockMvc.perform(post("/member/join")
+        mockMvc.perform(post("/join")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)).andDo(print());
 
@@ -58,8 +64,18 @@ public class MemberControllerTest {
 
         String loginBody = om.writeValueAsString(loginForm);
 
-        mockMvc.perform(post("/member/login")
+        String body3 = mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(loginBody)).andDo(print());
+                .content(loginBody)).andDo(print())
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+
+        // Token 으로 로그인 처리 테스트
+        Map<String, String> data = om.readValue(body3, new TypeReference<>() {});
+
+        String token = data.get("data");
+
+        mockMvc.perform(get("/test")
+                .header("Authorization", "Bearer " + token))
+                .andDo(print());
     }
 }
