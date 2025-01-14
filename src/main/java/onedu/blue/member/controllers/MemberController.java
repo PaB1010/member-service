@@ -7,18 +7,18 @@ import lombok.RequiredArgsConstructor;
 import onedu.blue.global.exceptions.BadRequestException;
 import onedu.blue.global.libs.Utils;
 import onedu.blue.global.rests.JSONData;
+import onedu.blue.member.MemberInfo;
 import onedu.blue.member.jwt.TokenService;
 import onedu.blue.member.services.MemberUpdateService;
 import onedu.blue.member.validators.JoinValidator;
 import onedu.blue.member.validators.LoginValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Member", description = "회원 인증/인가 API")
 @RestController
@@ -97,18 +97,18 @@ public class MemberController {
      *
      * @return
      */
-//    @GetMapping("/")
-//    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
-//
-//        return new JSONData(memberInfo.getMember());
-//    }
-//
-//    // 회원 전용 접근 테스트
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/test")
-//    public void test(@AuthenticationPrincipal MemberInfo memberInfo) {
-//
-//        System.out.println(memberInfo);
-//        System.out.println("회원 전용 URL");
-//    }
+    @GetMapping("/")
+    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
+
+        return new JSONData(memberInfo.getMember());
+    }
+
+    // 회원 전용 접근 테스트
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/test")
+    public void test(@AuthenticationPrincipal MemberInfo memberInfo) {
+
+        System.out.println(memberInfo);
+        System.out.println("회원 전용 URL");
+    }
 }

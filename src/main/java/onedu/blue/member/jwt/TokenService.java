@@ -10,7 +10,6 @@ import onedu.blue.member.MemberInfo;
 import onedu.blue.member.services.MemberInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
  * Token 생성 & 로그인 처리
  *
  */
-@Lazy
+// @Lazy
 @Service
 @EnableConfigurationProperties(JwtProperties.class)
 public class TokenService {
@@ -65,7 +64,7 @@ public class TokenService {
 
         // Token - 이메일 & 권한 실어 보낼 것
         // HMAC 시그니쳐 = sh512 해쉬
-        String authorities = memberInfo.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining("\\|\\|"));
+        String authorities = memberInfo.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining("||"));
 
         // Token 만료 시간 가공용
         int validTime = properties.getValidTime() * 1000;
@@ -108,7 +107,7 @@ public class TokenService {
 
         String authorities = (String) claims.get("authorities"); // Jwt.claim() 에 있던 이름 참고
 
-        List<SimpleGrantedAuthority> _authorities = Arrays.stream(authorities.split("||")).map(SimpleGrantedAuthority::new).toList();
+        List<SimpleGrantedAuthority> _authorities = Arrays.stream(authorities.split("\\|\\|")).map(SimpleGrantedAuthority::new).toList();
 
         MemberInfo memberInfo = (MemberInfo) infoService.loadUserByUsername(email);
 

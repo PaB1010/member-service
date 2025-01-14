@@ -1,5 +1,6 @@
 package onedu.blue.member.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -68,13 +71,13 @@ public class MemberControllerTest {
 
 
         // Token 으로 로그인 처리 테스트
-//        Map<String, String> data = om.readValue(body3, new TypeReference<>() {});
-//
-//        String token = data.get("data");
-//
-//        mockMvc.perform(get("/test")
-//                .header("Authorization", "Bearer " + token))
-//                .andDo(print());
+        Map<String, String> data = om.readValue(body3, new TypeReference<>() {});
+
+        String token = data.get("data");
+
+        mockMvc.perform(get("/test")
+                .header("Authorization", "Bearer " + token))
+                .andDo(print());
 
 
     }
