@@ -1,7 +1,6 @@
 package onedu.blue.member.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +73,7 @@ public class MemberController {
 
             for (String domain : domains) {
 
+                /*
                 Cookie cookie = new Cookie("token", token);
 
                 // 전체 경로 가능
@@ -81,15 +81,29 @@ public class MemberController {
                 cookie.setDomain(domain);
                 cookie.setSecure(true);
                 cookie.setHttpOnly(true);
-
                 response.addCookie(cookie);
+                 */
+
+                // SameSite 정책 None = 다른 서버에서도 쿠키 설정 가능, Https 필수!
+                response.setHeader("Set-Cookie", String.format("token=%s; Path=/; Domain=%s; Secure; HttpOnly; SameSite=None", token, domain));
             }
         }
 
         return new JSONData(token);
     }
 
-    // 회원 전용 접근 테스트
+    /**
+     * 로그인한 회원정보 조회
+     *
+     * @return
+     */
+//    @GetMapping("/")
+//    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
+//
+//        return new JSONData(memberInfo.getMember());
+//    }
+//
+//    // 회원 전용 접근 테스트
 //    @PreAuthorize("isAuthenticated()")
 //    @GetMapping("/test")
 //    public void test(@AuthenticationPrincipal MemberInfo memberInfo) {
