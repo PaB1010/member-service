@@ -128,10 +128,8 @@ public class TokenService {
 
         String authHeader = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(authHeader)) {
-
-            throw new UnAuthorizedException();
-        }
+        // 회원 가입 & 로그인 시
+        if (!StringUtils.hasText(authHeader)) return null;
 
         // authHeader = authHeader.replace("Bearer ", "");
 

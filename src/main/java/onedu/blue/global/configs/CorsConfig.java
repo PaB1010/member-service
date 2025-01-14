@@ -1,13 +1,10 @@
 package onedu.blue.global.configs;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import java.util.List;
 
 /**
  * Cross Origin Resource Sharing 정책
@@ -17,8 +14,8 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-    @Value("${cors.allowed}")
-    private List<String> allowedOrigin;
+//    @Value("${cors.allowed}")
+//    private List<String> allowedOrigin;
 
     @Bean
     public CorsFilter corsFilter() {
@@ -30,17 +27,17 @@ public class CorsConfig {
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
 
-        if (allowedOrigin == null || allowedOrigin.isEmpty()) {
+        // if (allowedOrigin == null || allowedOrigin.isEmpty()) {
 
             config.addAllowedOrigin("*");
 
-        } else {
-
-            config.setAllowedOrigins(allowedOrigin);
-
-            // Origin 설정 방식 true 설정 필수
-            config.setAllowCredentials(true);
-        }
+//        } else {
+//
+//            config.setAllowedOrigins(allowedOrigin);
+//
+//            // Origin 설정 방식 true 설정 필수
+//            config.setAllowCredentials(true);
+//        }
 
         source.registerCorsConfiguration("/**", config);
 

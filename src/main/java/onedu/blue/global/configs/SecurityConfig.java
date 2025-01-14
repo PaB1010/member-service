@@ -1,7 +1,7 @@
 package onedu.blue.global.configs;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import onedu.blue.global.exceptions.UnAuthorizedException;
 import onedu.blue.member.jwt.filters.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,13 +54,15 @@ public class SecurityConfig {
                     // 미로그인 상태에서 접근한 경우
                     c.authenticationEntryPoint((req, res, e) -> {
 
-                       throw new UnAuthorizedException();
+                       // throw new UnAuthorizedException();
+                        res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                     });
 
                     // 로그인 후 권한이 없는 경우
                     c.accessDeniedHandler((req, res, e) -> {
 
-                      throw new UnAuthorizedException();
+                      // throw new UnAuthorizedException();
+                        res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                     });
                 })
                 // 미로그인시 접근 가능한 패턴
@@ -74,8 +76,7 @@ public class SecurityConfig {
 
                             // 나머지는 아무 인증, 즉 로그인시 접근 가능 패턴
                             .anyRequest().authenticated();
-                })
-
+                });
 
         // Security 설정 무력화
         return http.build();

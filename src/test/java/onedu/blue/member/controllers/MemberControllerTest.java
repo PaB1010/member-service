@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
-@ActiveProfiles({"default", "test"})
+@ActiveProfiles({"default", "test", "jwt"})
 @AutoConfigureMockMvc
 public class MemberControllerTest {
 
@@ -27,11 +27,12 @@ public class MemberControllerTest {
     private ObjectMapper om;
 
     @Test
-    @DisplayName("회원가입 테스트")
+    @DisplayName("회원가입 & 로그인 테스트")
     void joinTest() throws Exception {
         // 환경 변수
         // config.server=https://config-service.onedu.blue
 
+        // 회원 가입
         RequestJoin form = new RequestJoin();
 
         form.setEmail("user01@test.org");
@@ -48,5 +49,17 @@ public class MemberControllerTest {
         mockMvc.perform(post("/member/join")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body)).andDo(print());
+
+        // 로그인 테스트 - Token 발급
+        RequestLogin loginForm = new RequestLogin();
+
+        loginForm.setEmail(form.getEmail());
+        loginForm.setPassword(form.getPassword());
+
+        String loginBody = om.writeValueAsString(loginForm);
+
+        mockMvc.perform(post("/member/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(loginBody)).andDo(print());
     }
 }
