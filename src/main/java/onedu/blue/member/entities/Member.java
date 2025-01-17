@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 import onedu.blue.global.entities.BaseEntity;
+import onedu.blue.member.constants.Authority;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -50,4 +51,9 @@ public class Member extends BaseEntity {
     // 자기소개
     @Lob
     private String bio;
+
+    public List<Authority> get_authorities() {
+        return authorities == null || authorities.isEmpty() ? List.of()
+                : authorities.stream().map(Authorities::getAuthority).toList();
+    }
 }

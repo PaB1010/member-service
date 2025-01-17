@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ import java.util.List;
  */
 @Lazy // 순환 참조 방지용
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MemberInfoService implements UserDetailsService {
 
